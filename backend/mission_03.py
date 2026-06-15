@@ -79,12 +79,26 @@ def simulate_growth(ph, days=7):
     print("-" * 35)
 
     height = 0.0
-    rate = daily_growth_rate(ph)
     results = []
 
     # YOUR LOOP HERE ↓
-    # for day in range(1, days + 1):
-    #     ...
+    for day in range(1, days + 1):
+        rate = daily_growth_rate(ph)
+        height = height + rate
+        status = health_status(ph)
+        
+        # Print with 1 decimal place
+        print(f"{day:<5} | {height:<12.1f} | {status}")
+        
+        # Store result in dictionary
+        results.append({
+            "day": day,
+            "height": round(height, 1),
+            "status": status
+        })
+        
+        # Dramatic pause between days
+        time.sleep(0.5)
 
     return results
 
@@ -107,8 +121,8 @@ def simulate_growth(ph, days=7):
 print("🔬 EXPERIMENT A — Plain water (pH 6.5)")
 results_a = simulate_growth(6.5)
 
-print("\n🔬 EXPERIMENT B — Detergent water (change this pH!)")
-results_b = simulate_growth(3.0)      # ← replace 3.0 with your actual detergent pH
+print("\n🔬 EXPERIMENT B — Detergent water (pH 3.0)")
+results_b = simulate_growth(3.0)      # Replace 3.0 with your actual detergent pH if differentH
 
 
 # ───────────────────────────────────────────────────────
@@ -127,10 +141,29 @@ results_b = simulate_growth(3.0)      # ← replace 3.0 with your actual deterge
 
 print("\n📊 FINAL COMPARISON")
 print("=" * 45)
-# YOUR SUMMARY CODE HERE ↓
-# Hint: the last item in results_a has the day 7 height
-# if len(results_a) > 0:
-#     print(f"Experiment A final height: {results_a[-1]['height']} cm")
+
+# Simple summary
+if results_a:
+    print(f"pH 6.5 (plain water): {results_a[-1]['height']} cm")
+else:
+    print("pH 6.5 (plain water): No growth")
+
+if results_b:
+    print(f"pH 3.0 (detergent): {results_b[-1]['height']} cm")
+else:
+    print("pH 3.0 (detergent): No growth")
+
+# Simple conclusion
+print("\nCONCLUSION:")
+if results_a and not results_b:
+    print("Only plain water worked. Detergent killed the seed.")
+elif results_a and results_b:
+    if results_a[-1]['height'] > results_b[-1]['height']:
+        print("Plain water grew taller than detergent water.")
+    else:
+        print("Detergent water grew taller than plain water.")
+else:
+    print("No growth in either experiment.")
 
 
 
